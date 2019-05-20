@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">DemoKotlin</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="toolbar_sky_fragment">Sky</string>
+    <string name="toolbar_beach_fragment">Beach</string>
+    <string name="toolbar_water_fall_fragment">Water Fall</string>
+    <string name="toolbar_desert_fragment">Desert</string>
+    <string name="toolbar_animal_fragment">Animal</string>
+    <string name="toolbar_flower_fragment">Flower</string>
+    <string name="toolbar_favorite_fragment">Favorite</string>
+    <string name="toolbar_item_rate">Rate</string>
+    <string name="toolbar_item_share">Share</string>
+    <string name="base_fragment_progress_bar_message">Please wait load more image</string>
+    <string name="base_category_fragment_progress_bar_message">Please wait setting wallpaper</string>
 </resources>

@@ -1,0 +1,55 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/navigation_sky"
+                android:icon="@drawable/icon_sky_navi"
+                android:title="@string/toolbar_sky_fragment" />
+
+        <item
+                android:id="@+id/navigation_beach"
+                android:icon="@drawable/icon_beach_navi"
+                android:title="@string/toolbar_beach_fragment" />
+        <item
+                android:id="@+id/navigation_water_fall"
+                android:icon="@drawable/icon_water_fall_navi"
+                android:title="@string/toolbar_water_fall_fragment" />
+
+        <item
+                android:id="@+id/navigation_desert"
+                android:icon="@drawable/icon_desert_navi"
+                android:title="@string/toolbar_desert_fragment" />
+
+        <item
+                android:id="@+id/navigation_animal"
+                android:icon="@drawable/icon_animal_navi"
+                android:title="@string/toolbar_animal_fragment" />
+
+        <item
+                android:id="@+id/navigation_flower"
+                android:icon="@drawable/icon_flower_navi"
+                android:title="@string/toolbar_flower_fragment" />
+
+        <item
+                android:id="@+id/navigation_favorite"
+                android:icon="@drawable/ic_favorite"
+                android:title="@string/toolbar_favorite_fragment" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                    android:id="@+id/nav_rate"
+                    android:icon="@drawable/ic_star_rate"
+                    android:title="Rate" />
+            <item
+                    android:id="@+id/nav_feedback"
+                    android:icon="@drawable/ic_feedback"
+                    android:title="Feedback" />
+        </menu>
+    </item>
+
+
+
+</menu>

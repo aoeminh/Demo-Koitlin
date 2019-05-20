@@ -1,0 +1,93 @@
+package minhnq.gvn.com.demokotlin.activity
+
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.app.FragmentManager
+import android.support.v4.view.GravityCompat
+import android.view.MenuItem
+import android.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_main.*
+import minhnq.gvn.com.demokotlin.R
+import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
+import minhnq.gvn.com.demokotlin.connection.Connection as Connection
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+
+    companion object{
+        val SKY: Int = 1
+        val BEACH: Int = 2
+        val WATERFALL: Int = 3
+        val DESERT: Int = 4
+        val ANIMAL: Int = 5
+
+        val FLOWER: Int = 6
+        val EXTRA_CATEGORY: String = "extra.category"
+    }
+
+     var toolbar: android.support.v7.widget.Toolbar? =null
+    var mNavigationView: NavigationView? = null
+    var isSetWallpaperSucess: Boolean = true
+    var connection: BroadcastReceiver? = null
+    var mFragmentmanager: FragmentManager = supportFragmentManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        registerInternet()
+        initView()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(connection)
+    }
+
+    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+        when(menuItem.itemId){
+            R.id.navigation_sky -> replaceFragment(SKY)
+            R.id.navigation_beach -> replaceFragment(BEACH)
+            R.id.navigation_water_fall -> replaceFragment(WATERFALL)
+            R.id.navigation_desert -> replaceFragment(DESERT)
+            R.id.navigation_animal -> replaceFragment(ANIMAL)
+            R.id.navigation_flower -> replaceFragment(FLOWER)
+
+        }
+        if(drawer_main.isDrawerOpen(GravityCompat.START)){
+            drawer_main.closeDrawer(GravityCompat.START)
+        }
+        return  false
+    }
+
+    fun replaceFragment(category: Int){
+        val baseCategoryFragment = BaseCategoryFragment()
+        val bundle = Bundle()
+        bundle.putInt(EXTRA_CATEGORY, category)
+        baseCategoryFragment.arguments = bundle
+        val fragmentTransition = mFragmentmanager.beginTransaction()
+        fragmentTransition.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
+        fragmentTransition.replace(R.id.frame_main,baseCategoryFragment)
+        fragmentTransition.addToBackStack(null)
+        fragmentTransition.commit()
+        
+    }
+
+    fun initView(){
+        setSupportActionBar(toolbar)
+        navigation_main.setNavigationItemSelectedListener(this)
+    }
+
+    fun registerInternet(){
+        connection = Connection()
+        val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(connection,intent)
+    }
+
+
+
+}
