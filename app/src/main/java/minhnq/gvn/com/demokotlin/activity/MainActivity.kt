@@ -13,6 +13,7 @@ import android.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
+import minhnq.gvn.com.demokotlin.fragment.HomeFragment
 import minhnq.gvn.com.demokotlin.connection.Connection as Connection
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -29,7 +30,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val EXTRA_CATEGORY: String = "extra.category"
     }
 
-     var toolbar: android.support.v7.widget.Toolbar? =null
     var mNavigationView: NavigationView? = null
     var isSetWallpaperSucess: Boolean = true
     var connection: BroadcastReceiver? = null
@@ -40,12 +40,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         registerInternet()
         initView()
+        addHomeFragment()
+
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(connection)
+    }
+
+    override fun onBackPressed() {
+        if(drawer_main.isDrawerOpen(GravityCompat.START)){
+            drawer_main.closeDrawer(GravityCompat.START)
+        }else{
+            var count = mFragmentmanager.backStackEntryCount
+            if(count == 0){
+                super.onBackPressed()
+            }else{
+                mFragmentmanager.popBackStack()
+            }
+        }
+
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -64,6 +80,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return  false
     }
 
+    fun addHomeFragment(){
+        var fragmentTransaction  = mFragmentmanager.beginTransaction()
+        fragmentTransaction.add(R.id.frame_main, HomeFragment(),null)
+        fragmentTransaction.commit()
+    }
+
     fun replaceFragment(category: Int){
         val baseCategoryFragment = BaseCategoryFragment()
         val bundle = Bundle()
@@ -74,11 +96,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragmentTransition.replace(R.id.frame_main,baseCategoryFragment)
         fragmentTransition.addToBackStack(null)
         fragmentTransition.commit()
-        
+
     }
 
     fun initView(){
-        setSupportActionBar(toolbar)
         navigation_main.setNavigationItemSelectedListener(this)
     }
 
@@ -87,7 +108,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(connection,intent)
     }
-
-
 
 }
