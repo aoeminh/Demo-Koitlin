@@ -9,8 +9,9 @@ class ItemOffsetDecoration(context: Context?, itemOffsetId: Int) : RecyclerView.
     var mItemOffset: Int? = null
 
     init {
-        this.mItemOffset = itemOffsetId
-        context?.resources?.getDimensionPixelSize(itemOffsetId)
+        val size =context?.resources?.getDimensionPixelSize(itemOffsetId)
+        this.mItemOffset = size
+
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

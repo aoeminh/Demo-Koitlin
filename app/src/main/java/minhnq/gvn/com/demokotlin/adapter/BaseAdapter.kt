@@ -19,9 +19,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.row_item_base_fragment.view.*
 import minhnq.gvn.com.demokotlin.R
+import minhnq.gvn.com.demokotlin.action.IOnItemClick
 import minhnq.gvn.com.demokotlin.model.Image
 
-class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>) :
+class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>, var iOnItemClick: IOnItemClick) :
     RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
 
 
@@ -37,10 +38,15 @@ class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bindImage(listImage[position])
-
+        viewHolder.onClickItem()
     }
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+        fun onClickItem(){
+            view.setOnClickListener(View.OnClickListener {
+                iOnItemClick.onClickItem(adapterPosition)
+            })
+        }
         fun bindImage(image: Image) {
             context?.let {
                 Glide.with(it).load(image.imageUrl).listener(object : RequestListener<Drawable> {
@@ -50,6 +56,7 @@ class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>) :
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        view.progress_bar_item_fragment_base.visibility=View.GONE
                         return false
                     }
 
@@ -60,18 +67,19 @@ class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>) :
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        return false
+                        view.progress_bar_item_fragment_base.visibility=View.GONE
 
+                        return false
                     }
 
                 }).apply(RequestOptions.centerCropTransform().placeholder(R.drawable.default_image)).into(view.im_row_item_fragment1)
                 Log.d("tag", "aasdsd")
             }
         }
+
     }
 
     fun appendList(listImage: ArrayList<Image>?){
-        val indes: Int =this.listImage.size
         listImage?.let { this.listImage.addAll(it) }
         notifyDataSetChanged()
     }

@@ -14,6 +14,7 @@ import android.widget.AbsListView
 import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.fragment_base.*
 import minhnq.gvn.com.demokotlin.R
+import minhnq.gvn.com.demokotlin.action.IOnItemClick
 import minhnq.gvn.com.demokotlin.activity.MainActivity
 import minhnq.gvn.com.demokotlin.adapter.BaseAdapter
 import minhnq.gvn.com.demokotlin.contract.IListImageHomePresenter
@@ -23,7 +24,7 @@ import minhnq.gvn.com.demokotlin.presenter.ListImageHomePresenter
 import minhnq.gvn.com.demokotlin.utils.ItemOffsetDecoration
 import android.widget.AbsListView.OnScrollListener as OnScrollListener1
 
-open abstract class BaseFragment() : Fragment(),IListImageHomeView{
+open abstract class BaseFragment() : Fragment(),IListImageHomeView,IOnItemClick{
 
     companion object {
         var FRAGMENT_NEW: Int = 1
@@ -78,18 +79,33 @@ open abstract class BaseFragment() : Fragment(),IListImageHomeView{
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         hideDiaLog()
-        //isLoadMore = listImage?.size != 0
+        isLoadMore = listImage?.size != 0
+    }
+
+    override fun onClickItem(position: Int) {
+        var listImagFragment = ListImagFragment()
+        var bundle = Bundle()
+        bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,listImage)
+        bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
+        listImagFragment.arguments  =bundle
+        var fragmenTransaction = mainActivity!!.mFragmentmanager.beginTransaction()
+        fragmenTransaction.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
+        fragmenTransaction.add(R.id.frame_main,listImagFragment)
+        fragmenTransaction.addToBackStack(null)
+        fragmenTransaction.commit()
+
+
     }
 
     fun setRecyclerView() {
         rv_base_fragment.visibility = View.VISIBLE
-        adapter = BaseAdapter(mainActivity, listImage)
+        adapter = BaseAdapter(mainActivity, listImage,this)
         val gridLayoutManager = GridLayoutManager(activity,2)
         val itemDecoration = ItemOffsetDecoration(activity,R.dimen.image_list_spacing)
         rv_base_fragment.addItemDecoration(itemDecoration)
         rv_base_fragment.layoutManager = gridLayoutManager
         rv_base_fragment.adapter=adapter
-//        setScrollAction()
+        setScrollAction()
     }
 
     fun setScrollAction(){

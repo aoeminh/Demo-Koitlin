@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import minhnq.gvn.com.demokotlin.R
+import minhnq.gvn.com.demokotlin.database.ImageDBOpenHelper
 import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
 import minhnq.gvn.com.demokotlin.fragment.HomeFragment
 import minhnq.gvn.com.demokotlin.connection.Connection as Connection
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var isSetWallpaperSucess: Boolean = true
     var connection: BroadcastReceiver? = null
     var mFragmentmanager: FragmentManager = supportFragmentManager
+    var imageDBOpenHelper: ImageDBOpenHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         registerInternet()
         initView()
         addHomeFragment()
-
+        initDB()
 
     }
 
@@ -107,6 +109,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         connection = Connection()
         val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(connection,intent)
+    }
+
+    fun initDB(){
+        imageDBOpenHelper = ImageDBOpenHelper(this,null)
     }
 
 }
