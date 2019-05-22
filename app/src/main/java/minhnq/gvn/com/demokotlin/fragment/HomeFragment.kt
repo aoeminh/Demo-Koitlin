@@ -37,11 +37,6 @@ class HomeFragment(): Fragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-
     fun addFragment(){
         adapter = ViewPagerAdapter(mainActivity?.mFragmentmanager)
         adapter?.addFragment(NewFragment(),"New")

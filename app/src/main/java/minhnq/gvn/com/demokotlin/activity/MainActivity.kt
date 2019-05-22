@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         baseCategoryFragment.arguments = bundle
         val fragmentTransition = mFragmentmanager.beginTransaction()
         fragmentTransition.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
-        fragmentTransition.replace(R.id.frame_main,baseCategoryFragment)
+        fragmentTransition.add(R.id.frame_main,baseCategoryFragment)
         fragmentTransition.addToBackStack(null)
         fragmentTransition.commit()
 

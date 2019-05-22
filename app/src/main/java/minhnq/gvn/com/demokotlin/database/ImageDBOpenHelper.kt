@@ -63,7 +63,8 @@ class ImageDBOpenHelper(var context: Context,var factory: SQLiteDatabase.CursorF
 
     fun deleteImage(image: Image){
         val db: SQLiteDatabase = this.readableDatabase
-        db.delete(TABLE_NAME, "$IMAGE_NAME = ?",  arrayOf(image.imageUrl)   )
+        var ads : Int =db.delete(TABLE_NAME, "$IMAGE_NAME = ?",  arrayOf(image.imageName)   )
+        Log.d("tag","$ads")
         db.close()
     }
 }
