@@ -23,15 +23,7 @@ import minhnq.gvn.com.demokotlin.presenter.ListImageHomePresenter
 import minhnq.gvn.com.demokotlin.utils.ItemOffsetDecoration
 
 class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
-    override fun onClickItem(position: Int) {
-        var listImagFragment = ListImagFragment()
-        var bundle = Bundle()
-        bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,listImage)
-        bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
-        listImagFragment.arguments  =bundle
-        mainActivity?.addFragment(listImagFragment)
 
-    }
 
     companion object{
         val EXTRA_POSITION: String = "extra.position"
@@ -103,6 +95,17 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         isLoading = false
         hideDiaLog()
         isLoadMore = !(listImage?.size!! < take)
+
+    }
+
+    override fun onClickItem(position: Int) {
+        var listImagFragment = ListImagFragment()
+        var bundle = Bundle()
+        bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,listImage)
+        bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
+        listImagFragment.arguments  =bundle
+        mainActivity?.ifExistFragment(ListImagFragment.TAG)
+        mainActivity?.addFragment(listImagFragment)
 
     }
 

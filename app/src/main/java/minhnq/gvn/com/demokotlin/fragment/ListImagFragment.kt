@@ -14,6 +14,9 @@ import minhnq.gvn.com.demokotlin.model.Image
 
 open class ListImagFragment(): Fragment() {
 
+    companion object{
+        val TAG: String = "ListImagFragment"
+    }
     var adapter: ListImageAdapter? =null
     var mainActivity: MainActivity? =null
     var position: Int? = null

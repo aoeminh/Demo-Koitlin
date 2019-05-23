@@ -16,6 +16,7 @@ import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.database.ImageDBOpenHelper
 import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
 import minhnq.gvn.com.demokotlin.fragment.HomeFragment
+import minhnq.gvn.com.demokotlin.fragment.ListImagFragment
 import minhnq.gvn.com.demokotlin.connection.Connection as Connection
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -84,16 +85,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun addHomeFragment(){
-        var fragmentTransaction  = mFragmentmanager.beginTransaction()
+        val fragmentTransaction  = mFragmentmanager.beginTransaction()
         fragmentTransaction.add(R.id.frame_main, HomeFragment(),null)
         fragmentTransaction.commit()
     }
 
     fun replaceFragment(category: Int){
-        val baseCategoryFragment = BaseCategoryFragment()
+        var baseCategoryFragment = BaseCategoryFragment()
         val bundle = Bundle()
         bundle.putInt(EXTRA_CATEGORY, category)
         baseCategoryFragment.arguments = bundle
+        ifExistFragment(BaseCategoryFragment.TAG)
         addFragment(baseCategoryFragment)
 
     }
@@ -118,6 +120,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initDB(){
         imageDBOpenHelper = ImageDBOpenHelper(this,null)
+    }
+
+    fun ifExistFragment(tag: String){
+        val listFragment = supportFragmentManager.fragments
+        listFragment.forEach{
+            if(tag.equals(BaseCategoryFragment.TAG)){
+                if(it is BaseCategoryFragment){
+                    supportFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss()
+                }
+            } else if (tag.equals(ListImagFragment.TAG)){
+                if(it is ListImagFragment){
+                    supportFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss()
+                }
+            }else if (tag.equals(ListImagFragment.TAG)){
+                if(it is ListImagFragment){
+                    supportFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss()
+                }
+            }
+        }
     }
 
 }
