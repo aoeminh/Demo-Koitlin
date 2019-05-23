@@ -77,7 +77,8 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         hideDiaLog()
-        isLoadMore = listImage?.size != 0
+        isLoading = false
+        isLoadMore = !(listImage?.size!! < take)
     }
 
     override fun onClickItem(position: Int) {
@@ -107,9 +108,9 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val gridLayoutManager = GridLayoutManager(activity,2)
+                val gridLayoutManager = rv_base_fragment.layoutManager as GridLayoutManager
                 val position = gridLayoutManager.findLastVisibleItemPosition()
-                if(isLoadMore){
+                if( isLoadMore){
                     //if loading in progress not excite loadmore
                     if(!isLoading){
                         //condition to loadmore
@@ -118,6 +119,7 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
                             skip+=take
                             isLoadMore =true
                             isLoading =true
+                            presenter?.getListImage(fragmentType ,skip,take)
                             Log.d("position","on loadmore" + " skip " + skip );
 
                         }
