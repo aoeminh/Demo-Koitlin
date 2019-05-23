@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var connection: BroadcastReceiver? = null
     var mFragmentmanager: FragmentManager = supportFragmentManager
     var imageDBOpenHelper: ImageDBOpenHelper? = null
-
+    var isSetWallpaperSuccess = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

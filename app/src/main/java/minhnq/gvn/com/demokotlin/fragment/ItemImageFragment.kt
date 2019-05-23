@@ -1,13 +1,18 @@
 package minhnq.gvn.com.demokotlin.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -18,11 +23,14 @@ import kotlinx.android.synthetic.main.fragment_item_image.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.activity.MainActivity
 import minhnq.gvn.com.demokotlin.model.Image
+import minhnq.gvn.com.demokotlin.utils.GetImageAsyncTask
 
-class ItemImageFragment(): Fragment(),View.OnClickListener {
+class ItemImageFragment(): Fragment(),View.OnClickListener,GetImageAsyncTask.IGetBitmap {
+
 
     var imageItem: Image? = null
     var progressBar: ProgressBar? = null
+    var mainActivity: MainActivity? = null
 
     companion object{
         var EXTRA_IMAGE = "extra.image"
@@ -40,6 +48,10 @@ class ItemImageFragment(): Fragment(),View.OnClickListener {
         if(arguments !=null){
             imageItem  = arguments!!.getParcelable(EXTRA_IMAGE)
 
+        }
+
+        if(activity is MainActivity){
+            mainActivity = activity as MainActivity
         }
     }
 
@@ -80,10 +92,27 @@ class ItemImageFragment(): Fragment(),View.OnClickListener {
                 .into(img_detail_fragment)
         }
     }
-    override fun onClick(v: View?) {
 
+    override fun onClick(v: View?) {
+        if(checkConnect()){
+            mainActivity?.isSetWallpaperSuccess = false
+            val getImageAsyncTask = GetImageAsyncTask(mainActivity!!,this)
+            getImageAsyncTask.execute(imageItem?.imageUrl)
+            Toast.makeText(mainActivity,"Setting Wallpaper in progress.Please wait!", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(mainActivity,"No connection internet", Toast.LENGTH_SHORT).show()
+
+        }
 
     }
 
+    override fun getBitmapSuccess(isSuccess: Boolean) {
+        mainActivity?.isSetWallpaperSuccess = true
+    }
 
+    fun checkConnect():Boolean{
+        val connectivityManager: ConnectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo.isConnected
+    }
 }
