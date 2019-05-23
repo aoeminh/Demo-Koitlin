@@ -1,6 +1,5 @@
 package minhnq.gvn.com.demokotlin.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
@@ -8,12 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestCoordinator
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
@@ -22,8 +18,8 @@ import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.action.IOnItemClick
 import minhnq.gvn.com.demokotlin.model.Image
 
-class BaseAdapter(var context: Context?, var listImage: ArrayList<Image>, var iOnItemClick: IOnItemClick) :
-    RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
+class BaseImageAdapter(var context: Context?, var listImage: ArrayList<Image>, var iOnItemClick: IOnItemClick) :
+    RecyclerView.Adapter<BaseImageAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): ViewHolder {

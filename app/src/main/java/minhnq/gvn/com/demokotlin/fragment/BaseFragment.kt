@@ -4,27 +4,25 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.fragment_base.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.action.IOnItemClick
 import minhnq.gvn.com.demokotlin.activity.MainActivity
-import minhnq.gvn.com.demokotlin.adapter.BaseAdapter
-import minhnq.gvn.com.demokotlin.contract.IListImageHomePresenter
-import minhnq.gvn.com.demokotlin.contract.IListImageHomeView
+import minhnq.gvn.com.demokotlin.adapter.BaseImageAdapter
+import minhnq.gvn.com.demokotlin.contract.IListImagePresenter
+import minhnq.gvn.com.demokotlin.contract.IListImageView
 import minhnq.gvn.com.demokotlin.model.Image
 import minhnq.gvn.com.demokotlin.presenter.ListImageHomePresenter
 import minhnq.gvn.com.demokotlin.utils.ItemOffsetDecoration
 import android.widget.AbsListView.OnScrollListener as OnScrollListener1
 
-open abstract class BaseFragment() : Fragment(),IListImageHomeView,IOnItemClick{
+open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
 
     companion object {
         var FRAGMENT_NEW: Int = 1
@@ -39,8 +37,8 @@ open abstract class BaseFragment() : Fragment(),IListImageHomeView,IOnItemClick{
     var isLoadMore: Boolean = false
     var mainActivity: MainActivity? = null
     var fragmentType: Int = 0
-    var adapter: BaseAdapter? = null
-    var presenter:IListImageHomePresenter? = null
+    var adapter: BaseImageAdapter? = null
+    var presenter:IListImagePresenter? = null
     var progressDialog:ProgressDialog? =null
     var progressBar: ProgressBar?=null
     var recyclerView: RecyclerView?= null
@@ -70,12 +68,12 @@ open abstract class BaseFragment() : Fragment(),IListImageHomeView,IOnItemClick{
 
         setRecyclerView()
         presenter = ListImageHomePresenter(this)
-        presenter?.getListImageHome(fragmentType,skip,take)
+        presenter?.getListImage(fragmentType,skip,take)
     }
 
     abstract fun getTypeFragment(): Int
 
-    override fun onResponseListImageHome(listImage: ArrayList<Image>?) {
+    override fun onResponseListImage(listImage: ArrayList<Image>?) {
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         hideDiaLog()
@@ -88,18 +86,14 @@ open abstract class BaseFragment() : Fragment(),IListImageHomeView,IOnItemClick{
         bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,listImage)
         bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
         listImagFragment.arguments  =bundle
-        var fragmenTransaction = mainActivity!!.mFragmentmanager.beginTransaction()
-        fragmenTransaction.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
-        fragmenTransaction.add(R.id.frame_main,listImagFragment)
-        fragmenTransaction.addToBackStack(null)
-        fragmenTransaction.commit()
+        mainActivity?.addFragment(listImagFragment)
 
 
     }
 
     fun setRecyclerView() {
         rv_base_fragment.visibility = View.VISIBLE
-        adapter = BaseAdapter(mainActivity, listImage,this)
+        adapter = BaseImageAdapter(mainActivity, listImage,this)
         val gridLayoutManager = GridLayoutManager(activity,2)
         val itemDecoration = ItemOffsetDecoration(activity,R.dimen.image_list_spacing)
         rv_base_fragment.addItemDecoration(itemDecoration)

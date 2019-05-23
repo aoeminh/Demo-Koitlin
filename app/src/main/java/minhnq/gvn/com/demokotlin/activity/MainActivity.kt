@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
@@ -93,11 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val bundle = Bundle()
         bundle.putInt(EXTRA_CATEGORY, category)
         baseCategoryFragment.arguments = bundle
-        val fragmentTransition = mFragmentmanager.beginTransaction()
-        fragmentTransition.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
-        fragmentTransition.add(R.id.frame_main,baseCategoryFragment)
-        fragmentTransition.addToBackStack(null)
-        fragmentTransition.commit()
+        addFragment(baseCategoryFragment)
 
     }
 
@@ -105,6 +102,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigation_main.setNavigationItemSelectedListener(this)
     }
 
+
+    fun addFragment(fragment: Fragment){
+        val fragmentTransition = mFragmentmanager.beginTransaction()
+        fragmentTransition.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
+        fragmentTransition.add(R.id.frame_main,fragment)
+        fragmentTransition.addToBackStack(null)
+        fragmentTransition.commit()
+    }
     fun registerInternet(){
         connection = Connection()
         val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)

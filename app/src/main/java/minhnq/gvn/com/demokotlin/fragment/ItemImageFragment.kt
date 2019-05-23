@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -21,6 +22,7 @@ import minhnq.gvn.com.demokotlin.model.Image
 class ItemImageFragment(): Fragment(),View.OnClickListener {
 
     var imageItem: Image? = null
+    var progressBar: ProgressBar? = null
 
     companion object{
         var EXTRA_IMAGE = "extra.image"
@@ -43,6 +45,7 @@ class ItemImageFragment(): Fragment(),View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view: View = inflater.inflate(R.layout.fragment_item_image,container,false)
+        progressBar = view.findViewById(R.id.progressbar_item_image)
         return view
     }
 
@@ -58,7 +61,7 @@ class ItemImageFragment(): Fragment(),View.OnClickListener {
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        progressbar_item_image.visibility = View.GONE
+                        progressBar?.visibility = View.GONE
                         return false
 
                     }
@@ -70,7 +73,7 @@ class ItemImageFragment(): Fragment(),View.OnClickListener {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        progressbar_item_image.visibility = View.GONE
+                        progressBar?.visibility = View.GONE
                         return false                    }
 
                 }).apply(RequestOptions.centerCropTransform().placeholder(R.drawable.default_image))
