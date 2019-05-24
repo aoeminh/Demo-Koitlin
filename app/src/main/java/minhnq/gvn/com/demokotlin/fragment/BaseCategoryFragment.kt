@@ -7,10 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
-import android.widget.BaseAdapter
 import android.widget.ProgressBar
-import android.widget.Toolbar
-import kotlinx.android.synthetic.main.fragment_base.*
 import kotlinx.android.synthetic.main.fragment_base_category.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.action.IOnItemClick
@@ -29,6 +26,7 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         val EXTRA_POSITION: String = "extra.position"
         val EXTRA_LIST_IMAGE: String = "extra.list.image"
         val TAG: String ="BaseCategoryFragment"
+        val HOLDITEM = 2
     }
 
     var toolbar: android.support.v7.widget.Toolbar? = null
@@ -40,7 +38,7 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
     var isLoading: Boolean = false
     var isLoadMore: Boolean = false
     var presneter: IListImagePresenter? =null
-    var listImage: ArrayList<Image> = arrayListOf()
+    var listImage: ArrayList<Image?>? = arrayListOf()
     var progressDialog:ProgressDialog? =null
     var progressBar: ProgressBar? = null
 
@@ -60,12 +58,12 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
 
         val view: View = inflater.inflate(R.layout.fragment_base_category,container,false)
         setHasOptionsMenu(true)
-        listImage.clear()
+        listImage?.clear()
         presneter = ListImageHomePresenter(this)
         toolbar = view.findViewById(R.id.toolbar_base_category_fragment)
         mainActivity?.setSupportActionBar(toolbar)
         progressBar  = view.findViewById(R.id.progress_bar_base_category_fragment)
-        if(listImage.size == 0){
+        if(listImage?.size == 0){
             progressBar?.visibility= View.VISIBLE
         }
         return view
@@ -93,7 +91,6 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         isLoading = false
-        hideDiaLog()
         isLoadMore = !(listImage?.size!! < take)
 
     }
@@ -127,13 +124,13 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
                 super.onScrolled(recyclerView, dx, dy)
                 val gridLayoutManager = rv_base_category_fragment.layoutManager as GridLayoutManager
                 val position = gridLayoutManager.findLastVisibleItemPosition()
+                var totalItemCount = gridLayoutManager.itemCount
                 Log.d("postion", "$position")
                 if(isLoadMore){
                     //if loading in progress not excite loadmore
                     if(!isLoading){
                         //condition to loadmore
-                        if(listImage.size -1 == position){
-                            showDialog()
+                        if(totalItemCount  <= position + HOLDITEM){
                             skip+=take
                             isLoadMore =true
                             isLoading =true
@@ -147,18 +144,7 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
             }
         })
     }
-    fun showDialog(){
-        progressDialog = ProgressDialog(activity)
-        progressDialog?.setMessage(resources.getString(R.string.base_fragment_progress_bar_message))
-        progressDialog?.setCancelable(true)
-        progressDialog?.show()
-    }
 
-    fun hideDiaLog(){
-        if(progressDialog !=null){
-            progressDialog?.dismiss()
-        }
-    }
 
     fun initToolbar(category: Int?){
         when(category){
@@ -174,6 +160,9 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
 
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
 
 
 

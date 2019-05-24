@@ -22,7 +22,7 @@ import minhnq.gvn.com.demokotlin.presenter.ListImageHomePresenter
 import minhnq.gvn.com.demokotlin.utils.ItemOffsetDecoration
 import android.widget.AbsListView.OnScrollListener as OnScrollListener1
 
-open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
+open abstract class BaseFragment : Fragment(),IListImageView,IOnItemClick{
 
     companion object {
         var FRAGMENT_NEW: Int = 1
@@ -30,7 +30,7 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
         var FRAGMENT_POPULAR: Int = 1
     }
 
-    var listImage: ArrayList<Image> = arrayListOf()
+    var listImage: ArrayList<Image?>? = arrayListOf()
     var skip: Int = 0
     var take: Int = 10
     var isLoading: Boolean = false
@@ -56,7 +56,7 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
         fragmentType = getTypeFragment()
         progressBar = view.findViewById(R.id.progress_bar_base_fragment)
         recyclerView = view.findViewById(R.id.rv_base_fragment)
-        if(listImage.size==0){
+        if(listImage?.size==0){
             progressBar?.visibility = View.VISIBLE
         }
 
@@ -74,6 +74,10 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
     abstract fun getTypeFragment(): Int
 
     override fun onResponseListImage(listImage: ArrayList<Image>?) {
+        if(isLoadMore){
+            this.listImage?.removeAt(this.listImage!!.size -1)
+            adapter?.notifyItemRemoved(this.listImage!!.size)
+        }
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         hideDiaLog()
@@ -96,6 +100,15 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
         rv_base_fragment.visibility = View.VISIBLE
         adapter = BaseImageAdapter(mainActivity, listImage,this)
         val gridLayoutManager = GridLayoutManager(activity,2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(i: Int): Int {
+                when (adapter?.getItemViewType(i)) {
+                    BaseImageAdapter.VIEW_TYPE_ITEM -> return 1
+                    BaseImageAdapter.VIEW_TYPE_LOADING -> return 2
+                }
+                return -1
+            }
+        }
         val itemDecoration = ItemOffsetDecoration(activity,R.dimen.image_list_spacing)
         rv_base_fragment.addItemDecoration(itemDecoration)
         rv_base_fragment.layoutManager = gridLayoutManager
@@ -110,17 +123,20 @@ open abstract class BaseFragment() : Fragment(),IListImageView,IOnItemClick{
                 super.onScrolled(recyclerView, dx, dy)
                 val gridLayoutManager = rv_base_fragment.layoutManager as GridLayoutManager
                 val position = gridLayoutManager.findLastVisibleItemPosition()
+                var totalItemCount = gridLayoutManager.itemCount
                 if( isLoadMore){
                     //if loading in progress not excite loadmore
                     if(!isLoading){
                         //condition to loadmore
-                        if(listImage.size -1 == position){
-                            showDialog()
+                        if(totalItemCount <= position + BaseCategoryFragment.HOLDITEM){
+                            listImage?.add(null)
+                            adapter?.notifyItemInserted(listImage!!.size -1)
                             skip+=take
+
+                            presenter?.getListImage(fragmentType ,skip,take)
                             isLoadMore =true
                             isLoading =true
-                            presenter?.getListImage(fragmentType ,skip,take)
-                            Log.d("position","on loadmore" + " skip " + skip );
+                            Log.d("position","on loadmore" + " skip " + skip )
 
                         }
                     }
