@@ -23,7 +23,7 @@ open class ListImagFragment(): Fragment() {
     var image: Image? =null
     var isFavorite: Int =0
     var listImage: ArrayList<Image> = arrayListOf()
-    var listImageFavorite: ArrayList<Image>?=null
+    var listImageFavorite: ArrayList<Image?>? = arrayListOf()
     var toolbar: Toolbar? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +93,7 @@ open class ListImagFragment(): Fragment() {
             image?.isFavorite = isFavorite
             var isExist: Boolean = false
             listImageFavorite?.forEach {
-                if (it.imageName.equals(image?.imageName)) {
+                if (it!!.imageName.equals(image?.imageName)) {
                     if (isFavorite == 0) {
                         isExist = true
                         mainActivity?.imageDBOpenHelper?.deleteImage(image!!)
@@ -122,8 +122,8 @@ open class ListImagFragment(): Fragment() {
         var menuItem: MenuItem = menu.findItem(R.id.item_favorite)
         if(listImageFavorite != null && image != null){
             listImageFavorite!!.forEach {
-                if(it.imageName.equals(image!!.imageName)){
-                    isFavorite = it.isFavorite;
+                if(it!!.imageName.equals(image!!.imageName)){
+                    isFavorite = it!!.isFavorite;
                     if(isFavorite== 1){
                         menuItem.setIcon(R.drawable.ic_favorite_red);
                         return;

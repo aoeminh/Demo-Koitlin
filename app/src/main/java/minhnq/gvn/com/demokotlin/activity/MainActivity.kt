@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.database.ImageDBOpenHelper
 import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
+import minhnq.gvn.com.demokotlin.fragment.FavoriteFragment
 import minhnq.gvn.com.demokotlin.fragment.HomeFragment
 import minhnq.gvn.com.demokotlin.fragment.ListImagFragment
 import minhnq.gvn.com.demokotlin.connection.Connection as Connection
@@ -28,8 +29,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val WATERFALL: Int = 3
         val DESERT: Int = 4
         val ANIMAL: Int = 5
-
         val FLOWER: Int = 6
+        val FAVORITE: Int = 7
         val EXTRA_CATEGORY: String = "extra.category"
     }
 
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.navigation_desert -> replaceFragment(DESERT)
             R.id.navigation_animal -> replaceFragment(ANIMAL)
             R.id.navigation_flower -> replaceFragment(FLOWER)
+            R.id.navigation_favorite -> replaceFragmentFavorite()
 
         }
         if(drawer_main.isDrawerOpen(GravityCompat.START)){
@@ -88,6 +90,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragmentTransaction  = mFragmentmanager.beginTransaction()
         fragmentTransaction.add(R.id.frame_main, HomeFragment(),null)
         fragmentTransaction.commit()
+    }
+
+    fun replaceFragmentFavorite(){
+        var favoriteFragment = FavoriteFragment()
+        ifExistFragment(FavoriteFragment.TAG)
+        addFragment(favoriteFragment)
+
     }
 
     fun replaceFragment(category: Int){
@@ -112,6 +121,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragmentTransition.addToBackStack(null)
         fragmentTransition.commit()
     }
+
+    fun addFragmentFavorite(fragment: Fragment){
+        val fragmentTransition = mFragmentmanager.beginTransaction()
+        fragmentTransition.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.fragment_pop_enter,R.anim.fragment_pop_exit)
+        fragmentTransition.replace(R.id.frame_main,fragment)
+        fragmentTransition.addToBackStack(null)
+        fragmentTransition.commit()
+    }
     fun registerInternet(){
         connection = Connection()
         val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -133,8 +150,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if(it is ListImagFragment){
                     supportFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss()
                 }
-            }else if (tag.equals(ListImagFragment.TAG)){
-                if(it is ListImagFragment){
+            }else if (tag.equals(FavoriteFragment.TAG)){
+                if(it is FavoriteFragment){
                     supportFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss()
                 }
             }

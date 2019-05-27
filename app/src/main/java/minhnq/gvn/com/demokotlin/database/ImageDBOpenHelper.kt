@@ -32,10 +32,10 @@ class ImageDBOpenHelper(var context: Context,var factory: SQLiteDatabase.CursorF
         onCreate(db)
     }
 
-    fun getAllImage():ArrayList<Image>{
+    fun getAllImage():ArrayList<Image?>{
         var sql= "SELECT * FROM $TABLE_NAME"
         var db: SQLiteDatabase = this.readableDatabase
-        var arrayList : ArrayList<Image> = arrayListOf()
+        var arrayList : ArrayList<Image?> = arrayListOf()
         var cursor: Cursor = db.rawQuery(sql,null)
         while (cursor.moveToNext()){
             var image: Image = Image(cursor.getInt(0),
@@ -65,6 +65,12 @@ class ImageDBOpenHelper(var context: Context,var factory: SQLiteDatabase.CursorF
         val db: SQLiteDatabase = this.readableDatabase
         var ads : Int =db.delete(TABLE_NAME, "$IMAGE_NAME = ?",  arrayOf(image.imageName)   )
         Log.d("tag","$ads")
+        db.close()
+    }
+
+    fun deleteAll(){
+        val db: SQLiteDatabase = this.readableDatabase
+        db.execSQL("DELETE FROM $TABLE_NAME")
         db.close()
     }
 }
