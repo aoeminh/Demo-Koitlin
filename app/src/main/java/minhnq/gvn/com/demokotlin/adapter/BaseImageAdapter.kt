@@ -38,8 +38,9 @@ class BaseImageAdapter(var context: Context?, var listImage: ArrayList<Image?>?,
                 .inflate(R.layout.loadmore, viewGroup, false)
             return ViewHolder(view)
         }
-        throw IllegalArgumentException()
-
+        val view: View = LayoutInflater.from(context)
+            .inflate(R.layout.loadmore, viewGroup, false)
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {

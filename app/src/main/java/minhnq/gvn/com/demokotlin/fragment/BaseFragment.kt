@@ -26,8 +26,8 @@ open abstract class BaseFragment : Fragment(),IListImageView,IOnItemClick{
 
     companion object {
         var FRAGMENT_NEW: Int = 1
-        var FRAGMENT_HOT: Int = 1
-        var FRAGMENT_POPULAR: Int = 1
+        var FRAGMENT_HOT: Int = 2
+        var FRAGMENT_POPULAR: Int = 3
     }
 
     var listImage: ArrayList<Image?>? = arrayListOf()

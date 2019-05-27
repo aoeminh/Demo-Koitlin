@@ -95,10 +95,16 @@ class ItemImageFragment(): Fragment(),View.OnClickListener,GetImageAsyncTask.IGe
 
     override fun onClick(v: View?) {
         if(checkConnect()){
-            mainActivity?.isSetWallpaperSuccess = false
-            val getImageAsyncTask = GetImageAsyncTask(mainActivity!!,this)
-            getImageAsyncTask.execute(imageItem?.imageUrl)
-            Toast.makeText(mainActivity,"Setting Wallpaper in progress.Please wait!", Toast.LENGTH_SHORT).show()
+            if(mainActivity!!.isSetWallpaperSuccess){
+                mainActivity?.isSetWallpaperSuccess = false
+                val getImageAsyncTask = GetImageAsyncTask(mainActivity!!,this)
+                getImageAsyncTask.execute(imageItem?.imageUrl)
+                Toast.makeText(mainActivity,"Setting Wallpaper in progress.Please wait!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(mainActivity,"Setting Wallpaper in progress.Please wait!", Toast.LENGTH_SHORT).show()
+
+            }
+
         }else{
             Toast.makeText(mainActivity,"No connection internet", Toast.LENGTH_SHORT).show()
 

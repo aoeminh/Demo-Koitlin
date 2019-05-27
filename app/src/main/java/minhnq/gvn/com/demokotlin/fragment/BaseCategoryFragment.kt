@@ -88,6 +88,11 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         return super.onOptionsItemSelected(item)
     }
     override fun onResponseListImage(listImage: ArrayList<Image>?) {
+
+        if(isLoadMore){
+            this.listImage!!.removeAt(this.listImage!!.size-1)
+            adapter?.notifyItemRemoved(this.listImage!!.size)
+        }
         progressBar?.visibility = View.GONE
         adapter?.appendList(listImage)
         isLoading = false
@@ -110,6 +115,15 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         rv_base_category_fragment.visibility = View.VISIBLE
         adapter = BaseImageAdapter(mainActivity,listImage,this)
         val gridLayoutManager = GridLayoutManager(mainActivity,2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(i: Int): Int {
+                when (adapter?.getItemViewType(i)) {
+                    BaseImageAdapter.VIEW_TYPE_ITEM -> return 1
+                    BaseImageAdapter.VIEW_TYPE_LOADING -> return 2
+                }
+                return -1
+            }
+        }
         val itemOffsetDecoration = ItemOffsetDecoration(mainActivity,R.dimen.image_list_spacing)
         rv_base_category_fragment.addItemDecoration(itemOffsetDecoration)
         rv_base_category_fragment.layoutManager  = gridLayoutManager
@@ -131,6 +145,8 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
                     if(!isLoading){
                         //condition to loadmore
                         if(totalItemCount  <= position + HOLDITEM){
+                            listImage?.add(null)
+                            adapter?.notifyItemInserted(listImage!!.size -1)
                             skip+=take
                             isLoadMore =true
                             isLoading =true
