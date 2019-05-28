@@ -14,4 +14,9 @@ class ListImageAdapter(var list: ArrayList<Image>,var fm: FragmentManager): Frag
 
     override fun getCount(): Int {
         return list.size    }
+
+    fun appendList(list: ArrayList<Image>){
+        this.list.addAll(list)
+        notifyDataSetChanged()
+    }
 }

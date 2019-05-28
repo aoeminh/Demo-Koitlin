@@ -52,7 +52,8 @@ open class ListImagFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ListImageAdapter(listImage,mainActivity!!.mFragmentmanager)
+        adapter = ListImageAdapter(arrayListOf(),mainActivity!!.mFragmentmanager)
+        adapter?.appendList(listImage)
         view_pager_list_image_fragment.adapter = adapter
         view_pager_list_image_fragment.currentItem = position!!
         view_pager_list_image_fragment.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{

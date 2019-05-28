@@ -86,8 +86,17 @@ open abstract class BaseFragment : Fragment(),IListImageView,IOnItemClick{
     }
 
     override fun onClickItem(position: Int) {
-        var listImagFragment = ListImagFragment()
-        var bundle = Bundle()
+        val iterator = listImage?.iterator()
+        if (iterator != null) {
+            while (iterator.hasNext()){
+                val image = iterator.next()
+                if(image ==null){
+                    iterator.remove()
+                }
+            }
+        }
+        val listImagFragment = ListImagFragment()
+        val bundle = Bundle()
         bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,listImage)
         bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
         listImagFragment.arguments  =bundle
