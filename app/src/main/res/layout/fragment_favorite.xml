@@ -15,7 +15,7 @@
             android:background="@color/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="Favorite"
-
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:titleTextColor="#ffff" />
 
     <android.support.v7.widget.RecyclerView

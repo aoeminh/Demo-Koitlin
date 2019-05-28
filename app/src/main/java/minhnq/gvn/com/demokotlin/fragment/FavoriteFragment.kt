@@ -40,6 +40,12 @@ class FavoriteFragment(): Fragment(), IOnItemClick {
         setHasOptionsMenu(true)
         toolbar = view.findViewById(R.id.toolbar_favorite_fragment)
         mainActivity?.setSupportActionBar(toolbar)
+        mainActivity?.supportActionBar?.setDisplayShowHomeEnabled(true)
+        mainActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar?.setNavigationOnClickListener({
+            activity?.onBackPressed()
+        })
+
         favoriteList = mainActivity?.imageDBOpenHelper?.getAllImage()
 
         return view

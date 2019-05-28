@@ -62,6 +62,11 @@ class BaseCategoryFragment(): Fragment(),IListImageView,IOnItemClick {
         presneter = ListImageHomePresenter(this)
         toolbar = view.findViewById(R.id.toolbar_base_category_fragment)
         mainActivity?.setSupportActionBar(toolbar)
+        mainActivity?.supportActionBar?.setDisplayShowHomeEnabled(true)
+        mainActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar?.setNavigationOnClickListener({
+            activity?.onBackPressed()
+         })
         progressBar  = view.findViewById(R.id.progress_bar_base_category_fragment)
         if(listImage?.size == 0){
             progressBar?.visibility= View.VISIBLE
