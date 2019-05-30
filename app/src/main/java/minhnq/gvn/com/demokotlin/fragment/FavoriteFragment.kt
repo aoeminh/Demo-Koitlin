@@ -5,18 +5,21 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import android.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.action.IOnItemClick
+import minhnq.gvn.com.demokotlin.action.OnLongClickItem
 import minhnq.gvn.com.demokotlin.activity.MainActivity
 import minhnq.gvn.com.demokotlin.adapter.BaseImageAdapter
 import minhnq.gvn.com.demokotlin.model.Image
 import minhnq.gvn.com.demokotlin.utils.ItemOffsetDecoration
 
-class FavoriteFragment(): Fragment(), IOnItemClick {
+class FavoriteFragment(): Fragment(), IOnItemClick,OnLongClickItem {
+
 
     companion object{
         val TAG: String = "FavoriteFragment"
@@ -60,21 +63,21 @@ class FavoriteFragment(): Fragment(), IOnItemClick {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.item_delete){
             val alertDialogBuilder = AlertDialog.Builder(mainActivity!!)
-            alertDialogBuilder.setMessage("Do you want delete all image?")
+            alertDialogBuilder.setMessage(getString(R.string.message_delete_all_image))
             alertDialogBuilder.setCancelable(true)
-            alertDialogBuilder.setPositiveButton("Yes"){
+            alertDialogBuilder.setPositiveButton(getString(R.string.text_button_yes)){
                 dialog, which ->  
-                Toast.makeText(activity,"Delete all image",Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,getString(R.string.message_delete_success),Toast.LENGTH_SHORT).show()
                 mainActivity?.imageDBOpenHelper?.deleteAll()
                 favoriteList?.clear()
                 adapter?.notifyDataSetChanged()
             }
             
-            alertDialogBuilder.setNegativeButton("No"){
+            alertDialogBuilder.setNegativeButton(getString(R.string.text_button_no)){
                 dialog, which ->  dialog.dismiss()
             }
             if(favoriteList?.size != 0){
-                var alertDialog = alertDialogBuilder.create()
+                val alertDialog = alertDialogBuilder.create()
                 alertDialog.show()
             }
 
@@ -90,7 +93,7 @@ class FavoriteFragment(): Fragment(), IOnItemClick {
     }
 
     fun initRecyclerview(){
-        adapter = BaseImageAdapter(mainActivity,favoriteList,this)
+        adapter = BaseImageAdapter(mainActivity,favoriteList,this,this)
         var gridLayoutManager = GridLayoutManager(mainActivity,2)
         var itemDecoration = ItemOffsetDecoration(mainActivity,R.dimen.image_list_spacing)
         rv_favorite_fragment.addItemDecoration(itemDecoration)
@@ -108,5 +111,34 @@ class FavoriteFragment(): Fragment(), IOnItemClick {
         mainActivity?.addFragmentFavorite(listImagFragment)
 
     }
+
+    override fun onLongClickItem(position: Int) {
+        Log.d("onlong","long")
+        deleteImageDialog(position)
+
+
+    }
+    fun deleteImageDialog(position: Int){
+        val alerdialogBuilder = AlertDialog.Builder(mainActivity!!)
+        alerdialogBuilder.setMessage(getString(R.string.message_delete_image))
+        alerdialogBuilder.setCancelable(true)
+        alerdialogBuilder.setPositiveButton(R.string.text_button_yes){dialog, which ->
+            mainActivity?.imageDBOpenHelper?.deleteImage(favoriteList?.get(position)!!)
+            favoriteList?.remove(favoriteList?.get(position)!!)
+            adapter?.notifyDataSetChanged()
+         }
+        alerdialogBuilder.setNegativeButton(R.string.text_button_no){dialog, which ->
+
+            dialog.dismiss()
+        }
+
+        var alertDialog = alerdialogBuilder.create()
+        alertDialog.show()
+
+
+    }
+
+
+
 
 }

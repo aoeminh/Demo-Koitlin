@@ -16,4 +16,9 @@
     <string name="toolbar_item_share">Share</string>
     <string name="base_fragment_progress_bar_message">Please wait load more image</string>
     <string name="base_category_fragment_progress_bar_message">Please wait setting wallpaper</string>
+    <string name="message_delete_all_image">Do you want delete all image?</string>
+    <string name="text_button_yes">Yes</string>
+    <string name="text_button_no">No</string>
+    <string name="message_delete_success">Delete all image</string>
+    <string name="message_delete_image">Do you want delete image?</string>
 </resources>

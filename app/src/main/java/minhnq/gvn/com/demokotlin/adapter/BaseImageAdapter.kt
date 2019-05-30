@@ -17,10 +17,11 @@ import kotlinx.android.synthetic.main.loadmore.view.*
 import kotlinx.android.synthetic.main.row_item_base_fragment.view.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.action.IOnItemClick
+import minhnq.gvn.com.demokotlin.action.OnLongClickItem
 import minhnq.gvn.com.demokotlin.model.Image
 import java.lang.IllegalArgumentException
 
-class BaseImageAdapter(var context: Context?, var listImage: ArrayList<Image?>?, var iOnItemClick: IOnItemClick) :
+class BaseImageAdapter @JvmOverloads constructor(var context: Context?, var listImage: ArrayList<Image?>?, var iOnItemClick: IOnItemClick, var iOnLongClick: OnLongClickItem? =null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object{
         val VIEW_TYPE_ITEM = 0
@@ -51,6 +52,9 @@ class BaseImageAdapter(var context: Context?, var listImage: ArrayList<Image?>?,
         if(viewHolder is ViewHolder){
             viewHolder.bindImage(listImage?.get(position))
             viewHolder.onClickItem()
+            if(iOnLongClick!= null){
+                viewHolder.onLongClick()
+            }
         }else if (viewHolder is ViewHolderLoadMore){
             viewHolder.setLoadMore()
         }
@@ -66,8 +70,16 @@ class BaseImageAdapter(var context: Context?, var listImage: ArrayList<Image?>?,
     }
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+
+        fun onLongClick(){
+            view.setOnLongClickListener {
+                iOnLongClick?.onLongClickItem(adapterPosition)
+                return@setOnLongClickListener true
+            }
+        }
+
         fun onClickItem(){
-            view.setOnClickListener(View.OnClickListener {
+            view.setOnClickListener({
                 iOnItemClick.onClickItem(adapterPosition)
             })
         }
