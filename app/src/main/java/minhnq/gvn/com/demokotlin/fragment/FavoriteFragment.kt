@@ -108,6 +108,7 @@ class FavoriteFragment(): Fragment(), IOnItemClick,OnLongClickItem {
         bundle.putParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE,favoriteList)
         bundle.putInt(BaseCategoryFragment.EXTRA_POSITION,position)
         listImagFragment.arguments  =bundle
+        mainActivity?.ifExistFragment(ListImagFragment.TAG)
         mainActivity?.addFragmentFavorite(listImagFragment)
 
     }

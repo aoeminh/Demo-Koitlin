@@ -75,7 +75,7 @@ open class ListImagFragment(): Fragment() {
         menu?.clear()
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.item_toolbar_list_image,menu)
-        setUpToolbar()
+        setUpToolbar(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -118,31 +118,33 @@ open class ListImagFragment(): Fragment() {
         listImageFavorite = mainActivity?.imageDBOpenHelper?.getAllImage()
     }
 
-    fun setUpToolbar(){
-        var menu: Menu = toolbar!!.menu
-        var menuItem: MenuItem = menu.findItem(R.id.item_favorite)
-        if(listImageFavorite != null && image != null){
-            listImageFavorite!!.forEach {
-                if(it!!.imageName.equals(image!!.imageName)){
-                    isFavorite = it!!.isFavorite;
-                    if(isFavorite== 1){
-                        menuItem.setIcon(R.drawable.ic_favorite_red);
-                        return;
+    fun setUpToolbar(menu: Menu? = null){
+        menu?.let {
+            var menuItem: MenuItem = menu!!.findItem(R.id.item_favorite)
+            if(listImageFavorite != null && image != null){
+                listImageFavorite!!.forEach {
+                    if(it!!.imageName.equals(image!!.imageName)){
+                        isFavorite = it!!.isFavorite;
+                        if(isFavorite== 1){
+                            menuItem.setIcon(R.drawable.ic_favorite_red);
+                            return;
 
+                        }else {
+                            menuItem.setIcon(R.drawable.ic_favorite_white);
+
+                            return;
+                        }
                     }else {
+                        isFavorite = 0;
                         menuItem.setIcon(R.drawable.ic_favorite_white);
-
-                        return;
                     }
-                }else {
-                    isFavorite = 0;
-                    menuItem.setIcon(R.drawable.ic_favorite_white);
                 }
+
             }
 
         }
+        }
 
-    }
 
 
 }

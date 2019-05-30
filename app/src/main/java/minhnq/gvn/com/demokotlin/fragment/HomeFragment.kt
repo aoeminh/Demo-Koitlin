@@ -45,4 +45,12 @@ class HomeFragment(): Fragment() {
         viewpager_main.adapter = adapter
         tabLayout.setupWithViewPager(viewpager_main)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val listFragment= mainActivity?.supportFragmentManager?.fragments
+        listFragment?.forEach {
+            if(it is NewFragment || it is HotFragment || it is PopularFragment) mainActivity?.supportFragmentManager?.beginTransaction()?.remove(it)?.commit()
+        }
+    }
 }
