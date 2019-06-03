@@ -75,7 +75,7 @@ open class ListImagFragment(): Fragment() {
         menu?.clear()
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.item_toolbar_list_image,menu)
-        setUpToolbar(menu)
+        setUpToolbar()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -118,9 +118,10 @@ open class ListImagFragment(): Fragment() {
         listImageFavorite = mainActivity?.imageDBOpenHelper?.getAllImage()
     }
 
-    fun setUpToolbar(menu: Menu? = null){
-        menu?.let {
-            var menuItem: MenuItem = menu!!.findItem(R.id.item_favorite)
+    fun setUpToolbar(){
+        var menu: Menu = toolbar!!.menu
+        var menuItem: MenuItem = menu.findItem(R.id.item_favorite)
+
             if(listImageFavorite != null && image != null){
                 listImageFavorite!!.forEach {
                     if(it!!.imageName.equals(image!!.imageName)){
@@ -143,7 +144,7 @@ open class ListImagFragment(): Fragment() {
             }
 
         }
-        }
+
 
 
 

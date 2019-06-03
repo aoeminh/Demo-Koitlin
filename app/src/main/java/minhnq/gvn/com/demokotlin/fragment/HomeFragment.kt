@@ -39,6 +39,7 @@ class HomeFragment(): Fragment() {
 
     fun addFragment(){
         adapter = ViewPagerAdapter(mainActivity?.mFragmentmanager)
+
         adapter?.addFragment(NewFragment(),"New")
         adapter?.addFragment(HotFragment(),"Hot")
         adapter?.addFragment(PopularFragment(),"Popular")
@@ -50,7 +51,7 @@ class HomeFragment(): Fragment() {
         super.onDestroyView()
         val listFragment= mainActivity?.supportFragmentManager?.fragments
         listFragment?.forEach {
-            if(it is NewFragment || it is HotFragment || it is PopularFragment) mainActivity?.supportFragmentManager?.beginTransaction()?.remove(it)?.commit()
+            if(it is NewFragment || it is HotFragment || it is PopularFragment) mainActivity?.supportFragmentManager?.beginTransaction()?.remove(it)?.commitAllowingStateLoss()
         }
     }
 }
