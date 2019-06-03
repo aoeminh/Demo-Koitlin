@@ -121,4 +121,9 @@ class ItemImageFragment(): Fragment(),View.OnClickListener,GetImageAsyncTask.IGe
         val networkInfo: NetworkInfo = connectivityManager.activeNetworkInfo
         return networkInfo.isConnected
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+
+    }
 }

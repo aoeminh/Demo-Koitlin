@@ -49,9 +49,25 @@ class FavoriteFragment(): Fragment(), IOnItemClick,OnLongClickItem {
             activity?.onBackPressed()
         })
 
-        favoriteList = mainActivity?.imageDBOpenHelper?.getAllImage()
+        favoriteList?.clear()
+        favoriteList?.addAll(getListFavorite())
 
         return view
+    }
+
+    fun getListFavorite(): ArrayList<Image>{
+        var list = arrayListOf<Image>()
+        var cursor =  mainActivity?.imageDatabase?.imageDao()?.getAllImage()
+        cursor?.let {
+            while (cursor.moveToNext()){
+                var image = Image(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),1,
+                    cursor.getInt(3))
+                list.add(image)
+            }
+        }
+        return list;
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -68,7 +84,8 @@ class FavoriteFragment(): Fragment(), IOnItemClick,OnLongClickItem {
             alertDialogBuilder.setPositiveButton(getString(R.string.text_button_yes)){
                 dialog, which ->  
                 Toast.makeText(activity,getString(R.string.message_delete_success),Toast.LENGTH_SHORT).show()
-                mainActivity?.imageDBOpenHelper?.deleteAll()
+//                mainActivity?.imageDBOpenHelper?.deleteAll()
+                mainActivity?.imageDatabase?.imageDao()?.deleteAll()
                 favoriteList?.clear()
                 adapter?.notifyDataSetChanged()
             }
@@ -124,7 +141,8 @@ class FavoriteFragment(): Fragment(), IOnItemClick,OnLongClickItem {
         alerdialogBuilder.setMessage(getString(R.string.message_delete_image))
         alerdialogBuilder.setCancelable(true)
         alerdialogBuilder.setPositiveButton(R.string.text_button_yes){dialog, which ->
-            mainActivity?.imageDBOpenHelper?.deleteImage(favoriteList?.get(position)!!)
+//            mainActivity?.imageDBOpenHelper?.deleteImage(favoriteList?.get(position)!!)
+            mainActivity?.imageDatabase?.imageDao()?.deleteImage(favoriteList?.get(position)!!)
             favoriteList?.remove(favoriteList?.get(position)!!)
             adapter?.notifyDataSetChanged()
          }

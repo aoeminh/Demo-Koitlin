@@ -37,7 +37,7 @@ open class ListImagFragment(): Fragment() {
         }
 
 
-        getListFavorite()
+        listImageFavorite?.addAll(getListFavorite())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,7 +64,7 @@ open class ListImagFragment(): Fragment() {
             }
 
             override fun onPageSelected(p0: Int) {
-                getListFavorite()
+                listImageFavorite?.addAll(getListFavorite())
                 image = listImage[p0]
                 setUpToolbar()
             }
@@ -97,13 +97,15 @@ open class ListImagFragment(): Fragment() {
                 if (it!!.imageName.equals(image?.imageName)) {
                     if (isFavorite == 0) {
                         isExist = true
-                        mainActivity?.imageDBOpenHelper?.deleteImage(image!!)
+                        mainActivity?.imageDatabase?.imageDao()?.deleteImage(image!!)
+//                        mainActivity?.imageDBOpenHelper?.deleteImage(image!!)
                     }
                 }
             }
             if (!isExist) {
                 if (isFavorite == 1) {
-                    mainActivity?.imageDBOpenHelper?.addImage(image!!)
+                    mainActivity?.imageDatabase?.imageDao()?.inserImage(image!!)
+//                    mainActivity?.imageDBOpenHelper?.addImage(image!!)
                 }
             }
         }
@@ -114,8 +116,19 @@ open class ListImagFragment(): Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun getListFavorite(){
-        listImageFavorite = mainActivity?.imageDBOpenHelper?.getAllImage()
+    fun getListFavorite(): ArrayList<Image>{
+        var list = arrayListOf<Image>()
+       var cursor =  mainActivity?.imageDatabase?.imageDao()?.getAllImage()
+        cursor?.let {
+            while (cursor.moveToNext()){
+                var image = Image(cursor.getInt(0),
+                                cursor.getString(1),
+                                  cursor.getString(2),1,
+                                cursor.getInt(3))
+                list.add(image)
+            }
+        }
+        return list;
     }
 
     fun setUpToolbar(){

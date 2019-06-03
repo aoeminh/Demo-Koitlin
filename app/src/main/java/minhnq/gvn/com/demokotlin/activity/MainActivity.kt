@@ -14,6 +14,7 @@ import android.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import minhnq.gvn.com.demokotlin.R
 import minhnq.gvn.com.demokotlin.database.ImageDBOpenHelper
+import minhnq.gvn.com.demokotlin.database.ImageDatabase
 import minhnq.gvn.com.demokotlin.fragment.BaseCategoryFragment
 import minhnq.gvn.com.demokotlin.fragment.FavoriteFragment
 import minhnq.gvn.com.demokotlin.fragment.HomeFragment
@@ -34,8 +35,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val EXTRA_CATEGORY: String = "extra.category"
     }
 
+    var imageDatabase: ImageDatabase? = null
     var mNavigationView: NavigationView? = null
-    var isSetWallpaperSucess: Boolean = true
     var connection: BroadcastReceiver? = null
     var mFragmentmanager: FragmentManager = supportFragmentManager
     var imageDBOpenHelper: ImageDBOpenHelper? = null
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initView()
         addHomeFragment()
         initDB()
+        imageDatabase = ImageDatabase.getImageDatabase(this)
 
     }
 

@@ -1,27 +1,37 @@
 package minhnq.gvn.com.demokotlin.model
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "image")
 data class Image(
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "imageId")
     @SerializedName("imageId")
-    @Expose
     var imageId: Int,
 
     @SerializedName("imageName")
-    @Expose
+    @ColumnInfo(name = "imageName")
     var imageName: String,
 
     @SerializedName("imageUrl")
-    @Expose
+    @ColumnInfo(name = "imageUrl")
     var imageUrl: String,
 
+
     @SerializedName("imageCategory")
-    @Expose
+    @ColumnInfo(name = "imageCategory")
     var imageCategory: Int,
 
+    @SerializedName("isFavorite")
+    @ColumnInfo(name = "isFavorite")
     var isFavorite: Int
 ) :Parcelable{
     constructor(parcel: Parcel) : this(
@@ -53,5 +63,4 @@ data class Image(
             return arrayOfNulls(size)
         }
     }
-
 }
