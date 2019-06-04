@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import minhnq.gvn.com.demokotlin.fragment.ItemImageFragment
 import minhnq.gvn.com.demokotlin.model.Image
+import android.os.Parcelable
+
+
 
 class ListImageAdapter(var list: ArrayList<Image>,var fm: FragmentManager): FragmentStatePagerAdapter(fm) {
     override fun getItem(p0: Int): Fragment {
@@ -18,5 +21,9 @@ class ListImageAdapter(var list: ArrayList<Image>,var fm: FragmentManager): Frag
     fun appendList(list: ArrayList<Image>){
         this.list.addAll(list)
         notifyDataSetChanged()
+    }
+
+    override fun saveState(): Parcelable? {
+        return null
     }
 }

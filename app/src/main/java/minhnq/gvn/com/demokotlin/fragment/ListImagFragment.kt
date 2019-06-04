@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.*
 import kotlinx.android.synthetic.main.fragment_list_image.*
 import minhnq.gvn.com.demokotlin.R
@@ -35,7 +36,6 @@ open class ListImagFragment(): Fragment() {
             position = arguments!!.getInt(BaseCategoryFragment.EXTRA_POSITION)
             listImage = arguments!!.getParcelableArrayList(BaseCategoryFragment.EXTRA_LIST_IMAGE)
         }
-
 
         listImageFavorite?.addAll(getListFavorite())
     }
@@ -119,12 +119,14 @@ open class ListImagFragment(): Fragment() {
     fun getListFavorite(): ArrayList<Image>{
         var list = arrayListOf<Image>()
        var cursor =  mainActivity?.imageDatabase?.imageDao()?.getAllImage()
+        Log.d("cursor", "${cursor?.count}")
         cursor?.let {
             while (cursor.moveToNext()){
                 var image = Image(cursor.getInt(0),
                                 cursor.getString(1),
-                                  cursor.getString(2),1,
-                                cursor.getInt(3))
+                                  cursor.getString(2),
+                                cursor.getInt(3),
+                    cursor.getInt(4))
                 list.add(image)
             }
         }
@@ -158,6 +160,9 @@ open class ListImagFragment(): Fragment() {
 
         }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
 
 
 

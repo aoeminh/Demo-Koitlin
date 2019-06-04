@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun replaceFragmentFavorite(){
         var favoriteFragment = FavoriteFragment()
         ifExistFragment(FavoriteFragment.TAG)
-        addFragment(favoriteFragment)
+        addFragmentFavorite(favoriteFragment)
 
     }
 
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initDB(){
-        imageDBOpenHelper = ImageDBOpenHelper(this,null)
+//        imageDBOpenHelper = ImageDBOpenHelper(this,null)
     }
 
     fun ifExistFragment(tag: String){
