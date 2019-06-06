@@ -110,7 +110,6 @@ open class ListImagFragment(): Fragment() {
     }
 
 
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -119,28 +118,33 @@ open class ListImagFragment(): Fragment() {
     }
 
     fun setUpToolbar(){
+        getListFavorite()
         var menu: Menu = toolbar!!.menu
         var menuItem: MenuItem = menu.findItem(R.id.item_favorite)
 
-            if(listImageFavorite != null && image != null){
+            if(listImageFavorite!!.size >0 && image != null){
                 listImageFavorite!!.forEach {
                     if(it!!.imageName.equals(image!!.imageName)){
-                        isFavorite = it!!.isFavorite;
+                        isFavorite = it.isFavorite;
+                        image?.isFavorite = it.isFavorite
                         if(isFavorite== 1){
                             menuItem.setIcon(R.drawable.ic_favorite_red);
                             return;
 
                         }else {
                             menuItem.setIcon(R.drawable.ic_favorite_white);
-
                             return;
                         }
                     }else {
                         isFavorite = 0;
+                        image?.isFavorite = isFavorite
                         menuItem.setIcon(R.drawable.ic_favorite_white);
                     }
                 }
-
+            }else{
+                isFavorite = 0;
+                image?.isFavorite = isFavorite
+                menuItem.setIcon(R.drawable.ic_favorite_white);
             }
 
         }

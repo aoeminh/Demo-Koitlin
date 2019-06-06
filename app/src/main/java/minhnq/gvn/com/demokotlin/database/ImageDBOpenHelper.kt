@@ -57,13 +57,15 @@ class ImageDBOpenHelper(var context: Context,var factory: SQLiteDatabase.CursorF
         contentValues.put(IMAGE_NAME,image.imageName)
         contentValues.put(IMAGE_URL,image.imageUrl)
         contentValues.put(IMAGE_FAV,image.isFavorite)
-        val newRowId = db.insert(TABLE_NAME,null,contentValues)
+        val newRowId = db.insert(TABLE_NAME,null
+            ,contentValues)
         Log.d("tag"," $newRowId " );
     }
 
     fun deleteImage(image: Image){
         val db: SQLiteDatabase = this.readableDatabase
-        var ads : Int =db.delete(TABLE_NAME, "$IMAGE_NAME = ?",  arrayOf(image.imageName)   )
+        var ads : Int =db.delete(TABLE_NAME, "$IMAGE_NAME = ?"
+            ,  arrayOf(image.imageName)   )
         Log.d("tag","$ads")
         db.close()
     }
